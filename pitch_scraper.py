@@ -3,15 +3,15 @@ import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 
-def pitch_scrape():
-    albums = pull_sundata()
-    print(albums)
-    make_table(albums)
+def pitch_scrape(page_limit):
+    albums = pull_sundata(page_limit)
+    # make_table(albums)
+    return albums
 
-def pull_sundata():
+def pull_sundata(page_limit):
     all_albums = {'date': [], 'artist': [], 'album': []}
     i=1
-    while i < 3:
+    while i < page_limit:
         sundata = requests.get('https://pitchfork.com/reviews/sunday/?page=%d' % i)
         if sundata.status_code != 200:
             print('Page %d not found: status %s' % (i, sundata.status_code))
@@ -37,5 +37,3 @@ def pull_sundata():
 def make_table(albums):
     frame = pd.DataFrame(data=albums)
     print(frame)
-
-pitch_scrape()

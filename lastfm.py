@@ -1,10 +1,10 @@
 import requests, json, time, pandas as pd
 
-key = "97f2454b452da1dd2984e44d65593737"
-username = "gzuphoesdown"
+# username = "gzuphoesdown"
 
 pause_duration = 0.5
 
+key = "97f2454b452da1dd2984e44d65593737"
 url = 'https://ws.audioscrobbler.com/2.0/?method=user.get{}&user={}&api_key={}&limit={}&extended={}&page={}&format=json'
 extended = 0 #api lets you retrieve extended data for each track, 0=no, 1=yes
 page = 1 #page of results to start retrieving at
@@ -33,15 +33,15 @@ def pullTopTracks(username, limit):
     # top_tracks.head()
 
 
-def pullTopArtists(username, limit):
-    method = 'topartists'
+def pullTopAlbums(username, limit):
+    method = 'topalbums'
     request_url = url.format(method, username, key, limit, extended, page)
     response = requests.get(request_url).json()
     # print(response)
-    artists = []
-    for item in response[method]['artist']:
-        artists.append(item['name'])
+    albums = []
+    for item in response[method]['album']:
+        albums.append(item['name'])
 
-    print(artists)
+    return albums
 
-pullTopArtists("gzuphoesdown", 1000)
+
