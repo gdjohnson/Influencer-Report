@@ -10,7 +10,7 @@ def pitch_scrape():
 def pull_sundata():
     all_albums = {'date': [], 'artist': [], 'album': []}
     i=1
-    while i < 8:
+    while i < 4:
         sundata = requests.get('https://pitchfork.com/reviews/sunday/?page=%d' % i)
         if sundata.status_code != 200:
             print('Page %d not found: status %s' % (i, sundata.status_code))
@@ -34,7 +34,7 @@ def pull_sundata():
     return all_albums
 
 def make_table(albums):
-    frame = pd
+    frame = pd.DataFrame(data=listens)
     print(frame)
 
 pitch_scrape()
