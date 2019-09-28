@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 
-def pitch_scrape:
+def pitch_scrape():
     albums = pull_sundata()
     make_table(albums)
 
@@ -33,4 +33,8 @@ def pull_sundata():
 
     return all_albums
 
-pull_sundata()
+def make_table(albums):
+    frame = pd
+    print(frame)
+
+pitch_scrape()
