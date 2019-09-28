@@ -44,4 +44,13 @@ def pull_top_albums(username, limit):
 
     return albums
 
+def pull_weekly_char():
+    method = 'getweeklychartlist'
+    request_url = url.format(method, username, key, limit, extended, page)
+    response = requests.get(request_url).json()
 
+    albums = []
+    for item in response[method]['album']:
+        albums.append(item['name'])
+
+    return albums
