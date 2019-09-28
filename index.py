@@ -1,7 +1,7 @@
 import requests
 import pandas as pd
 import numpy as np
-from bs4 import BeautitermfulSoup
+from bs4 import BeautifulSoup
 
 page = 'https://last.fm/music/Cat+Power/Moon+Pix/'
 
@@ -38,6 +38,8 @@ def grab_listens(soup):
 
 def make_table(listens):
     frame = pd.DataFrame(data=listens)
+    print(frame)
+    print(" ")
     return frame
 
 def grab_change_over_time(listens):
@@ -59,6 +61,8 @@ def grab_change_over_time(listens):
             max_tup = (date, diff)
         i+=1
 
+    print(change)
+    print(" ")
     print(max_tup)
 
 pull_data(page)

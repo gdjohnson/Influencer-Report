@@ -6,7 +6,7 @@ username = "gzuphoesdown"
 pause_duration = 0.5
 
 url = 'https://ws.audioscrobbler.com/2.0/?method=user.get{}&user={}&api_key={}&limit={}&extended={}&page={}&format=json'
-limit = 200 #api lets you retrieve up to 200 records per call
+limit = 1 #api lets you retrieve up to 200 records per call
 extended = 0 #api lets you retrieve extended data for each track, 0=no, 1=yes
 page = 1 #page of results to start retrieving at
 
