@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 
 def pitch_scrape():
     albums = pull_sundata()
+    print(albums)
     make_table(albums)
 
 def pull_sundata():
     all_albums = {'date': [], 'artist': [], 'album': []}
     i=1
-    while i < 4:
+    while i < 3:
         sundata = requests.get('https://pitchfork.com/reviews/sunday/?page=%d' % i)
         if sundata.status_code != 200:
             print('Page %d not found: status %s' % (i, sundata.status_code))
@@ -23,7 +24,7 @@ def pull_sundata():
 
         j = 0
         while j < len(page_albums):
-            all_albums['date'].append(page_dates[j]['datetime'])
+            all_albums['date'].append(page_dates[j]['datetime'][0:10])
             all_albums['artist'].append(page_artists[j].string)
             all_albums['album'].append(page_albums[j].string)
             
