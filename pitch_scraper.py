@@ -34,7 +34,7 @@ def pull_sundata():
     return all_albums
 
 def make_table(albums):
-    frame = pd.DataFrame(data=listens)
+    frame = pd.DataFrame(data=albums)
     print(frame)
 
 pitch_scrape()
