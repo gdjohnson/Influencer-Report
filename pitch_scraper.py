@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 
 def pitch_scrape(page_limit):
     albums = pull_sundata(page_limit)
-    # make_table(albums)
+    make_table(albums)
     return albums
 
 def pull_sundata(page_limit):
@@ -36,4 +36,6 @@ def pull_sundata(page_limit):
 
 def make_table(albums):
     frame = pd.DataFrame(data=albums)
-    print(frame)
+    frame.to_csv('./sunday_reviews.csv', index=None, encoding='utf-8')
+
+pitch_scrape(100)

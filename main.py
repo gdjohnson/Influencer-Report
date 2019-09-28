@@ -1,16 +1,16 @@
-from pitch_scraper import pitch_scrape
-from lastfm import pullTopAlbums
+from lastfm import pull_top_albums
+import csv
 
-topAlbums = pullTopAlbums("gzuphoesdown", 1000)
-sunReviews = pitch_scrape(10)
+sundata = open('sunday_reviews.csv')
+sundata = csv.reader(sundata)
 
-matches = []
+sundata_albums = []
+for row in sundata:
+    sundata_albums.append(row[0])
 
-print(topAlbums)
-print(sunReviews)
+def find_album_matches(username):
+    top_albums = pull_top_albums(username, 1000)
+    return list(set(top_albums) & set(sundata_albums)) 
 
-for album in sunReviews['artist']:
-    if album == sunReviews:
-        matches.append(album)
-
-print(matches)
+print(find_album_matches("gzuphoesdown"))
+print(find_album_matches("grahamgjohnson"))
