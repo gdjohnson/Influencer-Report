@@ -44,13 +44,14 @@ def pull_top_albums(username, limit):
 
     return albums
 
-def pull_weekly_char():
-    method = 'getweeklychartlist'
-    request_url = url.format(method, username, key, limit, extended, page)
+def pull_weekly_char(username):
+    method = 'weeklychartlist'
+    newurl = 'https://ws.audioscrobbler.com/2.0/?method=user.get{}&user={}&api_key={}&format=json'
+    request_url = newurl.format(method, username, key)
     response = requests.get(request_url).json()
 
-    albums = []
-    for item in response[method]['album']:
-        albums.append(item['name'])
+    print(response)
 
-    return albums
+
+
+pull_weekly_char('gzuphoesdown')
