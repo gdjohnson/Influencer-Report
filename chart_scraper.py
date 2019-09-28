@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 
 page = 'https://last.fm/music/Cat+Power/Moon+Pix/'
 
-
 def pull_data(uri):
     data = requests.get(uri)
 

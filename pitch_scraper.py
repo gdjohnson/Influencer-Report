@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 from bs4 import BeautifulSoup
 
+# Needs to be re-exported to CSV to stay updated with new Sunday reviews
+
 def pitch_scrape(page_limit):
     albums = pull_sundata(page_limit)
     make_table(albums)

@@ -2,10 +2,13 @@ import requests, json, time, pandas as pd
 from datetime import datetime
 import numpy as np
 
+# Converts weekly chart Unix start dates to a standard year-month-date format
+# Does not need updating
+
+
 key = "97f2454b452da1dd2984e44d65593737"
 extended = 0 #api lets you retrieve extended data for each track, 0=no, 1=yes
 page = 1 #page of results to start retrieving at
-
 
 def pull_weekly_charts(username):
     method = 'weeklychartlist'
