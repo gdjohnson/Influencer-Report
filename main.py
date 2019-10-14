@@ -1,4 +1,4 @@
-from lastfm import pull_top_albums, pull_weekly_charts, pull_album_chart
+from lastfm import pull_top_albums, pull_weekly_charts#, pull_album_chart
 import datetime
 import csv
 
@@ -24,6 +24,12 @@ def find_album_matches(username):
         for review in sundata_albums:
             if review[0] == album:
                 matches.append(review)
+
+    othermatchesexample = []
+    othermatchesexample.append(set(top_albums).intersection(set(sundata_albums)))
+
+    if othermatchesexample == matches:
+        print("yes")
 
     return matches
 

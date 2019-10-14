@@ -47,7 +47,7 @@ def pull_top_albums(username, limit):
 
 def pull_weekly_charts(username, from_date):
     method = 'weeklyalbumchart'
-    to_date = from_date + 604800
+    to_date = int(from_date) + 604800
     newurl = 'https://ws.audioscrobbler.com/2.0/?method=user.get{}&user={}&from={}&to={}&api_key={}&format=json'
     request_url = newurl.format(method, username, from_date, to_date, key)
     response = requests.get(request_url).json()
