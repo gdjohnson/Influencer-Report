@@ -1,27 +1,35 @@
-from lastfm import pull_top_albums, pull_weekly_charts#, pull_album_chart
+from lastfm import pull_top_albums, pull_weekly_charts
 import datetime
 import csv
 
 # All Sunday Review albums. The CSV is formatted as [album, artist, date]
-sundata = open('sunday_reviews.csv')
-sundata = csv.reader(sundata)
-sundata_albums = []
-for row in sundata:
-    # Append tuples with album and date for verification against user behavior
-    sundata_albums.append((row[0], row[2]))
+
 
 def main(username):
+    sundata = load_sundata()
     # Finds all album matches btwn Sun Reviews & user listening
-    matches = find_album_matches(username) 
+    matches = find_album_matches(username, sundata) 
     # Checks if users began or heightened listened after Sun Review (incomplete)
     test_for_time_relevance(username, matches)
 
-def find_album_matches(username):
+
+def load_sundata():
+    sundata_csv = open('sunday_reviews.csv')
+    sundata_csv = csv.reader(sundata_csv)
+    sundata = []
+    for row in sundata_csv:
+        # Append tuples with album and date for verification against user behavior
+        sundata.append((row[0], row[2]))
+
+    print(sundata)
+    return sundata
+
+def find_album_matches(username, sundata):
     top_albums = pull_top_albums(username, 1000) #1000 API limit
     matches = []
 
     for album in top_albums:
-        for review in sundata_albums:
+        for review in sundata:
             if review[0] == album:
                 matches.append(review)
 
@@ -30,6 +38,7 @@ def find_album_matches(username):
 def test_for_time_relevance(username, matches):
     for match in matches:
         unix_start_date = find_date_range(match[1], username) # We pass Sunday review date via match[1]
+        print(unix_start_date)
         pull_weekly_charts(username, unix_start_date)
 
 
@@ -44,7 +53,8 @@ def find_date_range(date, username):
         #grabs unix timestamps of weekly chart start time
         #for all user's albums that have been sunday reviewed
         if row[0] == date:  #if Sun Review date matches weekly chart start date
+            print(row[1])
             return row[1]   #then we return the chart start date in unix
-
+            
 main("gzuphoesdown")
 
