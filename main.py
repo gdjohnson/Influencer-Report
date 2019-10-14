@@ -25,12 +25,6 @@ def find_album_matches(username):
             if review[0] == album:
                 matches.append(review)
 
-    othermatchesexample = []
-    othermatchesexample.append(set(top_albums).intersection(set(sundata_albums)))
-
-    if othermatchesexample == matches:
-        print("yes")
-
     return matches
 
 def test_for_time_relevance(username, matches):
@@ -52,5 +46,5 @@ def find_date_range(date, username):
         if row[0] == date:  #if Sun Review date matches weekly chart start date
             return row[1]   #then we return the chart start date in unix
 
-print(main("gzuphoesdown"))
-print(main("grahamgjohnson"))
+main("gzuphoesdown")
+

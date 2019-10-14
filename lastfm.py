@@ -19,7 +19,7 @@ def pull_top_tracks(username, limit):
     play_counts = []
     response = requests.get(request_url).json()
 
-    print(response)
+    #print(response)
     import pdb; pdb.set_trace()
     for item in response[method]['track']:
         artist_names.append(item['artist']['name'])
@@ -58,7 +58,7 @@ def pull_weekly_charts(username, from_date):
         name = chart['name']
         matches.append(name)
 
-    print(matches)
+    #print(matches)
     # return matches
 
 
