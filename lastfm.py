@@ -45,23 +45,54 @@ def pull_top_albums(username, limit):
 
     return albums
 
-def pull_weekly_charts(username, from_date):
+def check_against_chars(username, from_date, album_name):
+    # if the user listened to the album in the 3wks following Sunday review,
+    if pull_after_weeks(username, from_date, album_name):
+        # and the user did not listen to it in the 3wks preceding,
+        new_listener = pull_before_weeks(username, from_date, album_name)
+        if new_listener:
+            # return album as a match
+            return album_name
+
+
+def pull_after_weeks(username, from_date, album_name):
+    newurl = 'https://ws.audioscrobbler.com/2.0/?method=user.get{}&user={}&from={}&to={}&api_key={}&format=json'
     method = 'weeklyalbumchart'
     to_date = int(from_date) + 604800
+    start_dates = [int(from_date), to_date, to_date+604800]
+    end_dates = [to_date, to_date+604800, to_date+604800+604800]
+
+    i = 0
+    while i < 3:
+        request_url = newurl.format(method, username, start_dates[i], end_dates[i], key)
+        response = requests.get(request_url).json()
+        for chart in response['weeklyalbumchart']['album']:
+            name = chart['name']
+            if name == album_name:
+                return True
+        i+=1
+
+    return False
+
+def pull_before_weeks(username, end_date, album_name):
     newurl = 'https://ws.audioscrobbler.com/2.0/?method=user.get{}&user={}&from={}&to={}&api_key={}&format=json'
-    request_url = newurl.format(method, username, from_date, to_date, key)
-    response = requests.get(request_url).json()
+    method = 'weeklyalbumchart'
+    start = int(end_date) - (604800*3)
+    start_dates = [start, start+604800, start+604800+604800]
+    end_dates = [start+604800, start+604800+604800, int(end_date)]
 
-    matches = []
+    i = 0
+    while i < 3:
+        request_url = newurl.format(method, username, start_dates[i], end_dates[i], key)
+        response = requests.get(request_url).json()
 
-    for chart in response['weeklyalbumchart']['album']:
-        name = chart['name']
-        matches.append(name)
+        for chart in response['weeklyalbumchart']['album']:
+            name = chart['name']
+            if name == album_name:
+                return False
+        i+=1
 
-    #print(matches)
-    # return matches
-
-
+    return True
 
 
 # pull_weekly_chart('gzuphoesdown')

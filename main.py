@@ -1,4 +1,4 @@
-from lastfm import pull_top_albums, pull_weekly_charts
+from lastfm import pull_top_albums, pull_after_weeks, pull_before_weeks, check_against_chars
 import datetime
 import csv
 
@@ -10,7 +10,7 @@ def main(username):
     # Finds all album matches btwn Sun Reviews & user listening
     matches = find_album_matches(username, sundata) 
     # Checks if users began or heightened listened after Sun Review (incomplete)
-    test_for_time_relevance(username, matches)
+    matches = test_for_time_relevance(username, matches)
 
 
 def load_sundata():
@@ -21,7 +21,6 @@ def load_sundata():
         # Append tuples with album and date for verification against user behavior
         sundata.append((row[0], row[2]))
 
-    print(sundata)
     return sundata
 
 def find_album_matches(username, sundata):
@@ -36,11 +35,23 @@ def find_album_matches(username, sundata):
     return matches
 
 def test_for_time_relevance(username, matches):
+    survivors = []
+    print("ALL MATCHES: ")
+    print(matches)
     for match in matches:
         unix_start_date = find_date_range(match[1], username) # We pass Sunday review date via match[1]
-        print(unix_start_date)
-        pull_weekly_charts(username, unix_start_date)
-
+        survivor = check_against_chars(username, unix_start_date, match[0])
+        if survivor:
+            survivors.append(survivor)
+    
+    """    
+    survivors are: 
+        1) in both user library & sunday reviews
+        2) were listened to by user in 3wks following sunday review
+        3) did not listen to it the 3wks before
+    """
+    print(survivors)
+    return survivors
 
 def find_date_range(date, username):
     matches = []
@@ -53,8 +64,14 @@ def find_date_range(date, username):
         #grabs unix timestamps of weekly chart start time
         #for all user's albums that have been sunday reviewed
         if row[0] == date:  #if Sun Review date matches weekly chart start date
-            print(row[1])
             return row[1]   #then we return the chart start date in unix
             
-main("gzuphoesdown")
+# main("gzuphoesdown")
+# main("grahamgjohnson")
+# main("YoungTheHuman")
+# main("marcosavc")
+# main("timbadlose")
 
+main("canadaaustin")
+main("alyssagen")
+main("thebad69")
