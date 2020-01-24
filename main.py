@@ -1,6 +1,6 @@
 from lastfm import pull_top_albums, pull_after_weeks, pull_before_weeks, check_against_chars
-import datetime
-import csv
+import datetime, requests, csv
+from bs4 import BeautifulSoup
 
 # All Sunday Review albums. The CSV is formatted as [album, artist, date]
 
@@ -16,6 +16,7 @@ def main(username):
     time_relevant_matches = test_for_time_relevance(username, matches)
     
     # matches will have a list of albums; we can calculate matches.length() and 
+    return calculate_probability(username, matches, time_relevant_matches)
 
 
 def load_sundata():
@@ -71,15 +72,51 @@ def find_date_range(date, username):
         if row[0] == date:  #if Sun Review date matches weekly chart start date
             return row[1]   #then we return the chart start date in unix
 
+def pull_total_artists(user):
+    uri = 'https://last.fm/user/' + user
+    data = requests.get(uri)
+    if data.status_code == 200:
+        soup = BeautifulSoup(data.content, 'html.parser')
+        res = soup.find_all(class_="header-metadata-display")
+        child = res[1].findChildren('a', recursive=False)[0]
+        return int(child.string.replace(',', ''))
+    else:
+        print('Status code: %d' % data.status_code)
+
+def calculate_probability(user, matches, time_relevant_matches):
+    print(user)
+    print(" has ")
+    print(len(matches))
+    print("matches")
+    print(" and ")
+    print(len(time_relevant_matches))
+    print("TRM's")
+    print("for a total score of")
+    probability = 0.5
+    if matches == 0:
+        return 0
+    if time_relevant_matches == 0:
+        return (len(matches)/20 + (10*len(matches))/pull_total_artists(user))
+    if time_relevant_matches > 0:
+        probability = probability + len(time_relevant_matches)
+    if matches > 0:
+        probability = probability + (len(matches)/40)
+    print(probability)
+    return probability
+
+
 
 print("paul's matches")
 main("gzuphoesdown")
 print("graham's matches")
 main("grahamgjohnson")
+# print("yunghuman")
 # main("YoungTheHuman")
-# main("marcosavc")
+print("marcos is a bitch")
+main("marcosavc")
+# print("timmy")
 # main("timbadlose")
-# 
+# print("can")
 # main("canadaaustin")
 # main("alyssagen")
 # main("thebad69")

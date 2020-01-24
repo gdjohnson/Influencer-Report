@@ -19,7 +19,6 @@ def pull_top_tracks(username, limit):
     play_counts = []
     response = requests.get(request_url).json()
 
-    #print(response)
     import pdb; pdb.set_trace()
     for item in response[method]['track']:
         artist_names.append(item['artist']['name'])
@@ -38,7 +37,6 @@ def pull_top_albums(username, limit):
     method = 'topalbums'
     request_url = url.format(method, username, key, limit, extended, page)
     response = requests.get(request_url).json()
-    # print(response)
     albums = []
     for item in response[method]['album']:
         albums.append(item['name'])
@@ -65,11 +63,15 @@ def pull_after_weeks(username, from_date, album_name):
     i = 0
     while i < 3:
         request_url = newurl.format(method, username, start_dates[i], end_dates[i], key)
-        response = requests.get(request_url).json()
-        for chart in response['weeklyalbumchart']['album']:
-            name = chart['name']
-            if name == album_name:
-                return True
+        data = requests.get(request_url)
+        if data.status_code == 200:
+            data = data.json()
+            for chart in data['weeklyalbumchart']['album']:
+                name = chart['name']
+                if name == album_name:
+                    return True
+        else:
+            print(data.status_code)
         i+=1
 
     return False
@@ -84,12 +86,15 @@ def pull_before_weeks(username, end_date, album_name):
     i = 0
     while i < 3:
         request_url = newurl.format(method, username, start_dates[i], end_dates[i], key)
-        response = requests.get(request_url).json()
-
-        for chart in response['weeklyalbumchart']['album']:
-            name = chart['name']
-            if name == album_name:
-                return False
+        data = requests.get(request_url)
+        if data.status_code == 200:
+            data = data.json()
+            for chart in data['weeklyalbumchart']['album']:
+                name = chart['name']
+                if name == album_name:
+                    return False
+        else:
+            print(data.status_code)
         i+=1
 
     return True
