@@ -93,6 +93,3 @@ def pull_before_weeks(username, end_date, album_name):
         i+=1
 
     return True
-
-
-# pull_weekly_chart('gzuphoesdown')

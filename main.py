@@ -6,11 +6,16 @@ import csv
 
 
 def main(username):
+    # Loads Sunday review data
     sundata = load_sundata()
+
     # Finds all album matches btwn Sun Reviews & user listening
     matches = find_album_matches(username, sundata) 
+    
     # Checks if users began or heightened listened after Sun Review (incomplete)
-    matches = test_for_time_relevance(username, matches)
+    time_relevant_matches = test_for_time_relevance(username, matches)
+    
+    # matches will have a list of albums; we can calculate matches.length() and 
 
 
 def load_sundata():
@@ -35,23 +40,23 @@ def find_album_matches(username, sundata):
     return matches
 
 def test_for_time_relevance(username, matches):
-    survivors = []
+    time_relevant_matches = []
     print("ALL MATCHES: ")
     print(matches)
     for match in matches:
         unix_start_date = find_date_range(match[1], username) # We pass Sunday review date via match[1]
         survivor = check_against_chars(username, unix_start_date, match[0])
         if survivor:
-            survivors.append(survivor)
+            time_relevant_matches.append(survivor)
     
     """    
-    survivors are: 
+    time_relevant_matches are: 
         1) in both user library & sunday reviews
         2) were listened to by user in 3wks following sunday review
         3) did not listen to it the 3wks before
     """
-    print(survivors)
-    return survivors
+    print(time_relevant_matches)
+    return time_relevant_matches
 
 def find_date_range(date, username):
     matches = []
@@ -65,13 +70,16 @@ def find_date_range(date, username):
         #for all user's albums that have been sunday reviewed
         if row[0] == date:  #if Sun Review date matches weekly chart start date
             return row[1]   #then we return the chart start date in unix
-            
-# main("gzuphoesdown")
-# main("grahamgjohnson")
+
+
+print("paul's matches")
+main("gzuphoesdown")
+print("graham's matches")
+main("grahamgjohnson")
 # main("YoungTheHuman")
 # main("marcosavc")
 # main("timbadlose")
-
-main("canadaaustin")
-main("alyssagen")
-main("thebad69")
+# 
+# main("canadaaustin")
+# main("alyssagen")
+# main("thebad69")
